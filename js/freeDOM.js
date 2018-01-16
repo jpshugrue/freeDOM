@@ -1,6 +1,6 @@
 const DOMNodeCollection = require("./dom_node_collection");
 
-function $free(arg, ...callbacks) {
+const $free = function(arg, ...callbacks) {
   const whenLoaded = function(){
     callbacks.forEach ( (func) => {
       func();
@@ -20,7 +20,7 @@ function $free(arg, ...callbacks) {
     const nodes = Array.from(nodeList);
     return new DOMNodeCollection(nodes);
   }
-}
+};
 
 $free.extend = function(mainObj, ...otherObjs) {
   otherObjs.forEach ((obj) => {
@@ -52,4 +52,4 @@ $free.ajax = function(options) {
   request.send(JSON.stringify(defaults.data));
 };
 
-window.$free = $free;
+module.exports = $free;

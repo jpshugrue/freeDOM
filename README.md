@@ -1,6 +1,8 @@
 # freeDOM
 freeDOM is a library written entirely in JavaScript for manipulating the DOM, handling events and making AJAX requests
 
+Check out the Snake Live Demo implemented using freeDOM
+
 # Public API
 
 * [selector()](#freeselector-callbacks-selector)

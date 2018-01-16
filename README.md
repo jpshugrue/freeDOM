@@ -3,7 +3,7 @@ freeDOM is a library written entirely in JavaScript for manipulating the DOM, ha
 
 # Public API
 
-* [selector()](#freeselectorcallbacks-selector)
+* [selector()](#freeselector-callbacks-selector)
 * [html()](#html)
 * [empty()](#empty)
 * [append()](#appendcontent)

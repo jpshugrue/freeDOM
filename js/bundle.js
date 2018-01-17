@@ -87,88 +87,79 @@ $free(function () {
 const $free = __webpack_require__(2);
 const Board = __webpack_require__(4);
 
-var View = function ($el) {
-  this.$el = $el;
+class View {
 
-  this.board = new Board(20);
-  this.setupGrid();
+  constructor($el) {
+    this.$el = $el;
+    this.board = new Board(20);
+    this.setupGrid();
 
-  this.intervalId = window.setInterval(
-    this.step.bind(this),
-    View.STEP_MILLIS
-  );
-  window.onkeydown = () => (
-    // debugger
-    this.handleKeyEvent.bind(this)
-  );
+    this.KEYS = {
+      38: "N",
+      39: "E",
+      40: "S",
+      37: "W"
+    };
 
-  // function(e){
-  //   alert(String.fromCharCode(e.keyCode)+" --> "+e.keyCode);
-  // };
-  // debugger
-  // $free(document).on("keydown", ;
-};
+    this.STEP_MILLIS = 100;
 
-View.KEYS = {
-  38: "N",
-  39: "E",
-  40: "S",
-  37: "W"
-};
+    this.intervalId = window.setInterval(
+      this.step.bind(this),
+      this.STEP_MILLIS
+    );
 
-View.STEP_MILLIS = 100;
-
-View.prototype.handleKeyEvent = function (event) {
-  debugger
-  if (View.KEYS[event.keyCode]) {
-    this.board.snake.turn(View.KEYS[event.keyCode]);
-  } else {
-    // some other key was pressed; ignore.
+    window.onkeydown = (event) => {
+      this.handleKeyEvent(event);
+    };
   }
-};
 
-View.prototype.render = function () {
-  // simple text based rendering
-  // this.$el.html(this.board.render());
-
-  this.updateClasses(this.board.snake.segments, "snake");
-  this.updateClasses([this.board.apple.position], "apple");
-};
-
-View.prototype.updateClasses = function(coords, className) {
-  this.$li.find("." + className).removeClass();
-
-  coords.forEach(function(coord){
-    var flatCoord = (coord.i * this.board.dim) + coord.j;
-    // debugger
-    this.$li.eq(flatCoord).addClass(className);
-  }.bind(this));
-};
-
-View.prototype.setupGrid = function () {
-  var html = "";
-
-  for (var i = 0; i < this.board.dim; i++) {
-    html += "<ul>";
-    for (var j = 0; j < this.board.dim; j++) {
-      html += "<li></li>";
+  handleKeyEvent(event) {
+    if (this.KEYS[event.keyCode]) {
+      this.board.snake.turn(this.KEYS[event.keyCode]);
     }
-    html += "</ul>";
   }
 
-  this.$el.html(html);
-  this.$li = this.$el.find("li");
-};
-
-View.prototype.step = function () {
-  if (this.board.snake.segments.length > 0) {
-    this.board.snake.move();
-    this.render();
-  } else {
-    alert("You lose!");
-    window.clearInterval(this.intervalId);
+  render() {
+    this.updateClasses(this.board.snake.segments, "snake");
+    this.updateClasses([this.board.apple.position], "apple");
   }
-};
+
+  updateClasses(coords, className) {
+    this.$li.find("." + className).removeClass();
+
+    coords.forEach(function(coord){
+      var flatCoord = (coord.i * this.board.dim) + coord.j;
+      // debugger
+      this.$li.eq(flatCoord).addClass(className);
+    }.bind(this));
+  }
+
+  setupGrid() {
+    var html = "";
+
+    for (var i = 0; i < this.board.dim; i++) {
+      html += "<ul>";
+      for (var j = 0; j < this.board.dim; j++) {
+        html += "<li></li>";
+      }
+      html += "</ul>";
+    }
+
+    this.$el.html(html);
+    this.$li = this.$el.find("li");
+  }
+
+  step() {
+    if (this.board.snake.segments.length > 0) {
+      this.board.snake.move();
+      this.render();
+    } else {
+      alert("You lose!");
+      window.clearInterval(this.intervalId);
+    }
+  }
+
+}
 
 module.exports = View;
 

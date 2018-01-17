@@ -1,7 +1,10 @@
 class Board {
 
-  constructor() {
-    this.snake = new Snake([0,0]);
+  constructor(dimensions) {
+    this.dims = dimensions;
+    const startingPos = Math.floor(dimensions/2);
+    const startingCoord = new Coord([startingPos, startingPos]);
+    this.snake = new Snake(startingCoord);
     this.apple = new Apple();
   }
 
@@ -9,22 +12,22 @@ class Board {
 
 class Snake {
 
-  constructor(startingPos) {
+  constructor(startingCoord) {
     this.direction = "N";
-    this.headPos = startingPos;
-    this.segments = [];
+    this.headCoord = startingCoord;
+    this.segments = [startingCoord];
   }
 
   move() {
-    switch (this.headPos) {
+    switch (this.headCoord) {
       case "N":
-        this.headPos[1] -= 1;
+        this.headCoord.y -= 1;
       case "E":
-        this.headPos[0] += 1;
+        this.headCoord.x += 1;
       case "S":
-        this.headPos[1] += 1;
+        this.headCoord.y += 1;
       case "W":
-        this.headPos[0] -= 1;
+        this.headCoord.x -= 1;
     }
   }
 
@@ -39,6 +42,21 @@ class Apple {
 }
 
 class Coord {
+
+  constructor(coordinate) {
+    this.x = coordinate[0];
+    this.y = coordinate[1];
+  }
+
+  plus(coordinate) {
+    const newX = this.x + coordinate[0];
+    const newY = this.y + coordinate[1];
+    return new Coord([newX, newY]);
+  }
+
+  equals(coordinate) {
+    return (this.x === coordinate[0] && this.y === coordinate[1]);
+  }
 
 }
 

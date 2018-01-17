@@ -67,32 +67,9 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const SnakeView = __webpack_require__(1);
-const $free = __webpack_require__(6);
+const DOMNodeCollection = __webpack_require__(1);
 
-$free(function () {
-  const rootEl = $free('.snake-game');
-  new SnakeView(rootEl);
-});
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/jpshugrue/Documents/AppAcademy/codingIntensive/freeDOM/js/snake-view.js'\n    at Error (native)");
-
-/***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const DOMNodeCollection = __webpack_require__(7);
-
-const $free = function(arg, ...callbacks) {
+function $free(arg, ...callbacks) {
   const whenLoaded = function(){
     if (typeof arg === "function") {
       arg();
@@ -115,9 +92,7 @@ const $free = function(arg, ...callbacks) {
     const nodes = Array.from(nodeList);
     return new DOMNodeCollection(nodes);
   }
-};
-
-
+}
 
 $free.extend = function(mainObj, ...otherObjs) {
   otherObjs.forEach ((obj) => {
@@ -149,11 +124,11 @@ $free.ajax = function(options) {
   request.send(JSON.stringify(defaults.data));
 };
 
-module.exports = $free;
+window.$free = $free;
 
 
 /***/ }),
-/* 7 */
+/* 1 */
 /***/ (function(module, exports) {
 
 class DOMNodeCollection {

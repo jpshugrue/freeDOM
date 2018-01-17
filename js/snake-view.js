@@ -1,6 +1,5 @@
 const $free = require("./freeDOM");
-
-var Board = require('./snake.js');
+const Board = require('./snake.js');
 
 var View = function ($el) {
   this.$el = $el;
@@ -12,8 +11,16 @@ var View = function ($el) {
     this.step.bind(this),
     View.STEP_MILLIS
   );
+  window.onkeydown = () => (
+    // debugger
+    this.handleKeyEvent.bind(this)
+  );
 
-  $(window).on("keydown", this.handleKeyEvent.bind(this));
+  // function(e){
+  //   alert(String.fromCharCode(e.keyCode)+" --> "+e.keyCode);
+  // };
+  // debugger
+  // $free(document).on("keydown", ;
 };
 
 View.KEYS = {
@@ -26,6 +33,7 @@ View.KEYS = {
 View.STEP_MILLIS = 100;
 
 View.prototype.handleKeyEvent = function (event) {
+  debugger
   if (View.KEYS[event.keyCode]) {
     this.board.snake.turn(View.KEYS[event.keyCode]);
   } else {
@@ -42,10 +50,11 @@ View.prototype.render = function () {
 };
 
 View.prototype.updateClasses = function(coords, className) {
-  this.$li.filter("." + className).removeClass();
+  this.$li.find("." + className).removeClass();
 
   coords.forEach(function(coord){
     var flatCoord = (coord.i * this.board.dim) + coord.j;
+    // debugger
     this.$li.eq(flatCoord).addClass(className);
   }.bind(this));
 };

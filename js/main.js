@@ -1,6 +1,11 @@
-var SnakeView = require('./snake-view');
+const SnakeView = require('./snake-view');
+const $free = require("./freeDOM");
+// $(function () {
+//   var rootEl = $('.snake-game');
+//   new SnakeView(rootEl);
+// });
 
-$(function () {
-  var rootEl = $('.snake-game');
+$free(function () {
+  const rootEl = $free('.snake-game');
   new SnakeView(rootEl);
 });

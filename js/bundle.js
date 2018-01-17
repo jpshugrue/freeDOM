@@ -67,10 +67,15 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var SnakeView = __webpack_require__(1);
+const SnakeView = __webpack_require__(1);
+const $free = __webpack_require__(2);
+// $(function () {
+//   var rootEl = $('.snake-game');
+//   new SnakeView(rootEl);
+// });
 
-$(function () {
-  var rootEl = $('.snake-game');
+$free(function () {
+  const rootEl = $free('.snake-game');
   new SnakeView(rootEl);
 });
 
@@ -80,8 +85,7 @@ $(function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 const $free = __webpack_require__(2);
-
-var Board = __webpack_require__(4);
+const Board = __webpack_require__(4);
 
 var View = function ($el) {
   this.$el = $el;
@@ -93,8 +97,16 @@ var View = function ($el) {
     this.step.bind(this),
     View.STEP_MILLIS
   );
+  window.onkeydown = () => (
+    // debugger
+    this.handleKeyEvent.bind(this)
+  );
 
-  $(window).on("keydown", this.handleKeyEvent.bind(this));
+  // function(e){
+  //   alert(String.fromCharCode(e.keyCode)+" --> "+e.keyCode);
+  // };
+  // debugger
+  // $free(document).on("keydown", ;
 };
 
 View.KEYS = {
@@ -107,6 +119,7 @@ View.KEYS = {
 View.STEP_MILLIS = 100;
 
 View.prototype.handleKeyEvent = function (event) {
+  debugger
   if (View.KEYS[event.keyCode]) {
     this.board.snake.turn(View.KEYS[event.keyCode]);
   } else {
@@ -123,10 +136,11 @@ View.prototype.render = function () {
 };
 
 View.prototype.updateClasses = function(coords, className) {
-  this.$li.filter("." + className).removeClass();
+  this.$li.find("." + className).removeClass();
 
   coords.forEach(function(coord){
     var flatCoord = (coord.i * this.board.dim) + coord.j;
+    // debugger
     this.$li.eq(flatCoord).addClass(className);
   }.bind(this));
 };
@@ -167,6 +181,9 @@ const DOMNodeCollection = __webpack_require__(3);
 
 const $free = function(arg, ...callbacks) {
   const whenLoaded = function(){
+    if (typeof arg === "function") {
+      arg();
+    }
     callbacks.forEach ( (func) => {
       func();
     });
@@ -180,12 +197,14 @@ const $free = function(arg, ...callbacks) {
 
   if (arg instanceof HTMLElement) {
     return new DOMNodeCollection([arg]);
-  } else {
+  } else if (typeof arg === "string") {
     const nodeList = document.querySelectorAll(arg);
     const nodes = Array.from(nodeList);
     return new DOMNodeCollection(nodes);
   }
 };
+
+
 
 $free.extend = function(mainObj, ...otherObjs) {
   otherObjs.forEach ((obj) => {
@@ -317,7 +336,8 @@ class DOMNodeCollection {
   find(selector) {
     let foundArr = [];
     this.each((node) => {
-      foundArr.push(node.querySelectorAll(selector));
+      const nodeList = node.querySelectorAll(selector);
+      foundArr = foundArr.concat(Array.from(nodeList));
     });
     return new DOMNodeCollection(foundArr);
   }
@@ -325,6 +345,12 @@ class DOMNodeCollection {
   remove() {
     this.empty();
     this.nodes = [];
+  }
+
+  eq(index) {
+    let foundEl = [];
+    foundEl = [this.nodes[index]];
+    return new DOMNodeCollection(foundEl);
   }
 
 }

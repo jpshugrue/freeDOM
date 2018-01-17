@@ -2,6 +2,9 @@ const DOMNodeCollection = require("./dom_node_collection");
 
 const $free = function(arg, ...callbacks) {
   const whenLoaded = function(){
+    if (typeof arg === "function") {
+      arg();
+    }
     callbacks.forEach ( (func) => {
       func();
     });
@@ -15,12 +18,14 @@ const $free = function(arg, ...callbacks) {
 
   if (arg instanceof HTMLElement) {
     return new DOMNodeCollection([arg]);
-  } else {
+  } else if (typeof arg === "string") {
     const nodeList = document.querySelectorAll(arg);
     const nodes = Array.from(nodeList);
     return new DOMNodeCollection(nodes);
   }
 };
+
+
 
 $free.extend = function(mainObj, ...otherObjs) {
   otherObjs.forEach ((obj) => {

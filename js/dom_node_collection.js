@@ -91,7 +91,8 @@ class DOMNodeCollection {
   find(selector) {
     let foundArr = [];
     this.each((node) => {
-      foundArr.push(node.querySelectorAll(selector));
+      const nodeList = node.querySelectorAll(selector);
+      foundArr = foundArr.concat(Array.from(nodeList));
     });
     return new DOMNodeCollection(foundArr);
   }
@@ -99,6 +100,12 @@ class DOMNodeCollection {
   remove() {
     this.empty();
     this.nodes = [];
+  }
+
+  eq(index) {
+    let foundEl = [];
+    foundEl = [this.nodes[index]];
+    return new DOMNodeCollection(foundEl);
   }
 
 }
